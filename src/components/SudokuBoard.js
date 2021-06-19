@@ -18,6 +18,7 @@ export default class SudokuBoard extends Component {
             ) }
         
         {this.props.sudoku.solvedTime && <Result startTime={this.props.sudoku.startTime} solvedTime={this.props.sudoku.solvedTime} sudoku={this.props.sudoku} />}
+        {this.props.sudoku.challengeSolveTime && <h3>Your friend Solved in { Math.floor((new Date(this.props.sudoku.challengeSolveTime).getTime() -  new Date(this.props.sudoku.challengeStartTime).getTime())/1000) } seconds </h3>}
         {this.props.sudoku.rows.map((row) => (
           <div className="row" key={row.index}>
             {row.cols.map((field) => (

@@ -4,8 +4,8 @@ import generator from "sudoku";
 
 export function generateSudoku() {
   //Create a fuction that generate the sudoku board for you .
-  
-/**
+
+  /**
  * Generate a Sudoku   with the structure 
  * 
  * 
@@ -19,7 +19,12 @@ export function generateSudoku() {
  */
   const fromUrl = extractFromUrl();
   const raw = fromUrl ? fromUrl.raw : generator.makepuzzle();
-  const result = { rows: [] , raw};
+  const result = {
+    rows: [],
+    raw,
+    challengeSolveTime: !!fromUrl ? fromUrl.solvedTime : false,
+    challengeStartTime: !!fromUrl ? fromUrl.startTime : false,
+  };
   result.solution = generator.solvepuzzle(raw).map((e) => e + 1);
   for (let i = 0; i < 9; i++) {
     const row = { cols: [], index: i };
@@ -34,7 +39,7 @@ export function generateSudoku() {
     }
     result.rows.push(row);
   }
-  
+
   result.startTime = new Date();
   result.solvedTime = null;
   return result;
@@ -52,21 +57,21 @@ export function checkSolution(sudoku) {
   return true;
 }
 
-export function shareUrl(sudoku){
-    const data = {
-        raw: sudoku.raw,
-        startTime: sudoku.startTime,
-        solvedTime: sudoku.solvedTime
-    }
-    const query = btoa(JSON.stringify(data))
-    return document.location.href.replace(/\?.+$/ , '') + '?sudoku='+query
+export function shareUrl(sudoku) {
+  const data = {
+    raw: sudoku.raw,
+    startTime: sudoku.startTime,
+    solvedTime: sudoku.solvedTime,
+  };
+  const query = btoa(JSON.stringify(data));
+  return document.location.href.replace(/\?.+$/, "") + "?sudoku=" + query;
 }
 
-export function extractFromUrl(){
-    debugger
-    const match = document.location.search.split("?sudoku=");
-    if(match.length >= 2){
-        return JSON.parse(atob(match[1]))
-    }
-    return null
+export function extractFromUrl() {
+  debugger;
+  const match = document.location.search.split("?sudoku=");
+  if (match.length >= 2) {
+    return JSON.parse(atob(match[1]));
+  }
+  return null;
 }

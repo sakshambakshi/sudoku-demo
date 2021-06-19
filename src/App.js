@@ -68,7 +68,6 @@ class App extends Component {
       })
     );
   };
-  shareUrl = () => shareUrl(this.state.sudoku)
 
   render() {
     return (
@@ -82,7 +81,6 @@ class App extends Component {
         />
         <button onClick={this.solveSudoku}>Solve</button>
         <button onClick={this.checkSolution}>Check</button>
-        <button onClick={this.shareUrl}>Share</button>
       
       </div>
     );
