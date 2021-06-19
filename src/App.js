@@ -1,70 +1,20 @@
 import React, { Component } from "react";
 import "./App.css";
-import generator from "sudoku";
 import SudokuBoard from "./components/SudokuBoard";
 // import Timer from "./components/Timer";
-import produce from "immer";
-// this library provide utils for sudoku keep in mind it gives 0 - 8 rather that 1 - 8
-window.generator = generator; // done for testing
-
-/**
- * Generate a Sudoku   with the structure 
- * 
- * 
+import produce from "immer"; // for updating state properly
+import {generateSudoku,
+  checkSolution} from "./lib/Sudoku"
 
 
-   {rows:[
-     {cols: [
-       {row:0 , col:0 value:1, readonly:true }
-     ]}
-   ]}
- */
 
-function generateSudoku() {
-  //Create a fuction that generate the sudoku board for you .
-  const raw = generator.makepuzzle();
-  const result = { rows: [] };
-  result.solution = generator.solvepuzzle(raw).map((e) => e + 1);
-  for (let i = 0; i < 9; i++) {
-    const row = { cols: [], index: i };
-    for (let j = 0; j < 9; j++) {
-      const col = {
-        row: i,
-        col: j,
-        value: raw[i * 9 + j] !== null ? raw[i * 9 + j] + 1 : "",
-        readonly: raw[i * 9 + j] !== null,
-      };
-      row.cols.push(col);
-    }
-    result.rows.push(row);
-  }
-  result.startTime = new Date();
-  result.solvedTime = null;
-  return result;
-}
-// generateSudoku();
 
-function checkSolution(sudoku) {
-  
-  const candidate = sudoku.rows
-    .map((row) => row.cols.map(({ value }) => value))
-    .flat();
-  for (let i = 0; i < candidate.length; i++) {
-    // eslint-disable-next-line
-    if (candidate[i] === "" || sudoku.solution[i] != candidate[i]) {
-      return false;
-    }
-  }
-  return true;
-  
-}
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = produce({}, () => ({
       sudoku: generateSudoku(),
     }));
-    // checkSolution(this.state.sudoku)
   }
   checkSolution = () => {
     
