@@ -4,7 +4,7 @@ import SudokuBoard from "./components/SudokuBoard";
 // import Timer from "./components/Timer";
 import produce from "immer"; // for updating state properly
 import {generateSudoku,
-  checkSolution} from "./lib/Sudoku"
+  checkSolution , shareUrl } from "./lib/Sudoku"
 
 
 
@@ -25,6 +25,8 @@ class App extends Component {
           
           if (isSudokuSolved) {
             state.sudoku.solvedTime = new Date();
+            state.sudoku.shareUrl = shareUrl(state.sudoku)
+            debugger
           }
         }
       })
@@ -43,6 +45,8 @@ class App extends Component {
           
           if (isSudokuSolved) {
             state.sudoku.solvedTime = new Date();
+            state.sudoku.shareUrl = shareUrl(state.sudoku)
+            debugger
           }
         }
       })
@@ -64,6 +68,7 @@ class App extends Component {
       })
     );
   };
+  shareUrl = () => shareUrl(this.state.sudoku)
 
   render() {
     return (
@@ -77,6 +82,8 @@ class App extends Component {
         />
         <button onClick={this.solveSudoku}>Solve</button>
         <button onClick={this.checkSolution}>Check</button>
+        <button onClick={this.shareUrl}>Share</button>
+      
       </div>
     );
   }
