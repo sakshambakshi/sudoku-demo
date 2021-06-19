@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import SudokuField from "./SudokuField"
 export default class SudokuBoard extends Component {
-    constructor(props){
-        super(props)
-        const {sudoku } = props ;
+    updateValue = ({field , value} ) =>{
+        // const su
+        // const {sudoku}  =  this.props;
+        // sudoku.rows[field.row].cols[field.col].value = value 
+        // this.props.updateSudoku(sudoku)
+        this.props.updateSudoku({field , value})
     }
     render() {
         return (
@@ -11,7 +14,7 @@ export default class SudokuBoard extends Component {
                 {this.props.sudoku.rows.map(row => (
                     <div className="row" key={row.index}>
                         {
-                            row.cols.map(field => <SudokuField field={field} key={field.col}/>)
+                            row.cols.map(field => <SudokuField field={field} onChange={this.updateValue} key={field.col}/>)
                         }
                     </div>   
 
