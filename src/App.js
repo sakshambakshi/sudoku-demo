@@ -50,6 +50,7 @@ function checkSolution(sudoku) {
     .map((row) => row.cols.map(({ value }) => value))
     .flat();
   for (let i = 0; i < candidate.length; i++) {
+    // eslint-disable-next-line
     if (candidate[i] === "" || sudoku.solution[i] != candidate[i]) {
       return false;
     }
