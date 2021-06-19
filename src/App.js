@@ -24,7 +24,7 @@ function generateSudoku() {
   const raw = generator.makepuzzle();
   console.log(raw);
   const result = { rows: [] };
-  result.solution =  generator.solvepuzzle(raw)
+  result.solution = generator.solvepuzzle(raw).map((e) => e + 1);
   for (let i = 0; i < 9; i++) {
     const row = { cols: [], index: i };
     for (let j = 0; j < 9; j++) {
@@ -38,56 +38,81 @@ function generateSudoku() {
     }
     result.rows.push(row);
   }
-  console.log({ result });
+  result.startTime = new Date();
+  result.solvedTime = null;
   return result;
 }
 // generateSudoku();
 
-function checkSolution(sudoku){
-  const candidate = sudoku.rows.map(row => row.cols.map(({value}) => value)).flat()
-  for(let i = 0 ; i < candidate.length ; i++){
-    if(candidate[i] === "" || sudoku.solution[i] != candidate[i]  ){
-      return false
+function checkSolution(sudoku) {
+  debugger;
+  const candidate = sudoku.rows
+    .map((row) => row.cols.map(({ value }) => value))
+    .flat();
+  for (let i = 0; i < candidate.length; i++) {
+    if (candidate[i] === "" || sudoku.solution[i] != candidate[i]) {
+      return false;
     }
   }
-  return true   
-  debugger
+  return true;
+  debugger;
 }
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = produce({},() => ({
+    this.state = produce({}, () => ({
       sudoku: generateSudoku(),
     }));
     // checkSolution(this.state.sudoku)
-
   }
-  updateSudoku = ({field , value}) => {
+  checkSolution = () => {
+    debugger;
+    this.setState(
+      produce((state) => {
+        if (!state.sudoku.solvedTime) {
+          const isSudokuSolved = checkSolution(state.sudoku);
+          debugger;
+          if (isSudokuSolved) {
+            state.sudoku.solvedTime = new Date();
+          }
+        }
+      })
+    );
+  };
+  updateSudoku = ({ field, value }) => {
     // this.setState((state, props) => {
     //   return { ...state, sudoku: newSudoku };
     // });
     this.setState(
-      produce(
-        state => {
-          state.sudoku.rows[field.row].cols[field.col].value = value 
+      produce((state) => {
+        state.sudoku.rows[field.row].cols[field.col].value = value;
+        debugger;
+        if (!state.sudoku.solvedTime) {
+          const isSudokuSolved = checkSolution(state.sudoku);
+          debugger;
+          if (isSudokuSolved) {
+            state.sudoku.solvedTime = new Date();
+          }
         }
-      )
-    )
+      })
+    );
   };
 
   solveSudoku = () => {
-      this.setState(produce(state => {
-        state.sudoku.rows.forEach( (row) => {
-            row.cols.forEach((col) => {
-              if(!col.readonly){
-
-                col.value = state.sudoku.solution[col.row * 9 + col.col ] + 1
-
-              }
-            })
+    this.setState(
+      produce((state) => {
+        state.sudoku.rows.forEach((row) => {
+          row.cols.forEach((col) => {
+            if (!col.readonly) {
+              col.value = state.sudoku.solution[col.row * 9 + col.col];
+            }
+          });
         });
-      }))
-  }
+
+        // this.updateSudoku()
+      })
+    );
+  };
 
   render() {
     return (
@@ -100,8 +125,8 @@ class App extends Component {
           sudoku={this.state.sudoku}
           updateSudoku={this.updateSudoku}
         />
-        <button  onClick={this.solveSudoku}>Solve</button>
-        <button  onClick={this.checkSolution}>Check</button>
+        <button onClick={this.solveSudoku}>Solve</button>
+        <button onClick={this.checkSolution}>Check</button>
       </div>
     );
   }

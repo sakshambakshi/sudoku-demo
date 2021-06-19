@@ -11,6 +11,7 @@ export default class SudokuBoard extends Component {
     render() {
         return (
             <div>
+                {this.props.sudoku.solvedTime && <h2>You Solved the Sudoku!!</h2>}
                 {this.props.sudoku.rows.map(row => (
                     <div className="row" key={row.index}>
                         {
