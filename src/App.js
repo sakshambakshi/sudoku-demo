@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import generator from "sudoku";
 import SudokuBoard from "./components/SudokuBoard";
+// import Timer from "./components/Timer";
 import produce from "immer";
 // this library provide utils for sudoku keep in mind it gives 0 - 8 rather that 1 - 8
 window.generator = generator; // done for testing
@@ -22,7 +23,6 @@ window.generator = generator; // done for testing
 function generateSudoku() {
   //Create a fuction that generate the sudoku board for you .
   const raw = generator.makepuzzle();
-  console.log(raw);
   const result = { rows: [] };
   result.solution = generator.solvepuzzle(raw).map((e) => e + 1);
   for (let i = 0; i < 9; i++) {
@@ -45,7 +45,7 @@ function generateSudoku() {
 // generateSudoku();
 
 function checkSolution(sudoku) {
-  debugger;
+  
   const candidate = sudoku.rows
     .map((row) => row.cols.map(({ value }) => value))
     .flat();
@@ -55,7 +55,7 @@ function checkSolution(sudoku) {
     }
   }
   return true;
-  debugger;
+  
 }
 class App extends Component {
   constructor(props) {
@@ -66,12 +66,12 @@ class App extends Component {
     // checkSolution(this.state.sudoku)
   }
   checkSolution = () => {
-    debugger;
+    
     this.setState(
       produce((state) => {
         if (!state.sudoku.solvedTime) {
           const isSudokuSolved = checkSolution(state.sudoku);
-          debugger;
+          
           if (isSudokuSolved) {
             state.sudoku.solvedTime = new Date();
           }
@@ -86,10 +86,10 @@ class App extends Component {
     this.setState(
       produce((state) => {
         state.sudoku.rows[field.row].cols[field.col].value = value;
-        debugger;
+        
         if (!state.sudoku.solvedTime) {
           const isSudokuSolved = checkSolution(state.sudoku);
-          debugger;
+          
           if (isSudokuSolved) {
             state.sudoku.solvedTime = new Date();
           }
@@ -120,7 +120,6 @@ class App extends Component {
         <header className="App-header">
           <h1>Sudoku Demo</h1>
         </header>
-
         <SudokuBoard
           sudoku={this.state.sudoku}
           updateSudoku={this.updateSudoku}
